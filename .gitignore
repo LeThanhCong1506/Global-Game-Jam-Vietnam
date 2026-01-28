@@ -21,3 +21,5 @@
 # Lưu ý quan trọng cho Unity
 !/[Aa]ssets/**/*.meta
 /[Aa]sset[Ss]/[Aa]ddersonly/
+/UserSettings/Layouts/default-6000.dwlt
+/ProjectSettings/PackageManagerSettings.asset
