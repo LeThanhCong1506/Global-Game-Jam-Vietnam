@@ -14,7 +14,7 @@ namespace Visioneer.MaskPuzzle
         public static LevelTimer Instance { get; private set; }
 
         [Header("Timer Settings")]
-        [SerializeField] private float startTime = 60f;
+        [SerializeField] private float startTime = 360f; // 6 minutes
         [SerializeField] private float maskCExtraDrainPerSecond = 1f;
         
         [Header("Level Settings")]
