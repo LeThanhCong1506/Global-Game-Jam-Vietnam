@@ -53,11 +53,8 @@ namespace Visioneer.MaskPuzzle
 
         private void OnPlayerEnteredTile(TileData tile)
         {
-            // Check if player entered exit tile
+            // Check if player entered any exit tile
             if (!tile.IsExit) return;
-
-            // Check if on this specific exit
-            if (exitTileData != null && tile != exitTileData) return;
 
             TryExit();
         }

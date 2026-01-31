@@ -2,16 +2,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 namespace Visioneer.MaskPuzzle
 {
     /// <summary>
     /// Handles player movement on the tile grid.
     /// Click adjacent tile to move. Tile-step movement only.
-    /// Supports both Legacy Input and New Input System.
     /// </summary>
     public class PlayerGridMover : MonoBehaviour
     {
@@ -20,6 +17,7 @@ namespace Visioneer.MaskPuzzle
         [Header("Movement Settings")]
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float moveHeight = 0.5f; // Slight hop during movement
+        [SerializeField] private float playerHeight = 1f; // Y offset above tile
 
         [Header("Current Position")]
         [SerializeField] private Vector2Int currentGridCoord;
@@ -65,7 +63,6 @@ namespace Visioneer.MaskPuzzle
 
         private void HandleClickInput()
         {
-#if ENABLE_INPUT_SYSTEM
             // New Input System
             Mouse mouse = Mouse.current;
             if (mouse == null) return;
@@ -77,21 +74,14 @@ namespace Visioneer.MaskPuzzle
 
                 if (clickedTile != null)
                 {
+                    Debug.Log($"[PlayerGridMover] Clicked tile: {clickedTile.GridCoord}, Walkable: {clickedTile.IsWalkable}");
                     TryMoveToTile(clickedTile);
                 }
-            }
-#else
-            // Legacy Input
-            if (Input.GetMouseButtonDown(0))
-            {
-                TileData clickedTile = GridManager.Instance?.RaycastToTile(Input.mousePosition);
-
-                if (clickedTile != null)
+                else
                 {
-                    TryMoveToTile(clickedTile);
+                    Debug.Log("[PlayerGridMover] Clicked but no tile found by raycast");
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -199,7 +189,7 @@ namespace Visioneer.MaskPuzzle
         public void TeleportToTile(TileData tile)
         {
             currentGridCoord = tile.GridCoord;
-            transform.position = tile.transform.position + Vector3.up * 0.5f; // Slight offset above tile
+            transform.position = tile.transform.position + Vector3.up * playerHeight; // Offset above tile
 
             Debug.Log($"[PlayerGridMover] Teleported to {tile.GridCoord}");
         }

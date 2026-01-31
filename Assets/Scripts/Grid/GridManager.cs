@@ -136,6 +136,7 @@ namespace Visioneer.MaskPuzzle
 
         /// <summary>
         /// Raycast from screen position to find tile.
+        /// Uses RaycastAll to find tile even if other objects are in front.
         /// </summary>
         public TileData RaycastToTile(Vector3 screenPosition, Camera camera = null)
         {
@@ -145,16 +146,21 @@ namespace Visioneer.MaskPuzzle
             }
 
             Ray ray = camera.ScreenPointToRay(screenPosition);
-            RaycastHit hit;
+            RaycastHit[] hits = Physics.RaycastAll(ray, 100f, tileLayerMask);
 
-            if (Physics.Raycast(ray, out hit, 100f, tileLayerMask))
+            // Find the first hit that has a TileData component
+            foreach (var hit in hits)
             {
                 TileData tile = hit.collider.GetComponent<TileData>();
                 if (tile == null)
                 {
                     tile = hit.collider.GetComponentInParent<TileData>();
                 }
-                return tile;
+                
+                if (tile != null)
+                {
+                    return tile;
+                }
             }
 
             return null;
