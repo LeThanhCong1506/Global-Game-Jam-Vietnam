@@ -1,12 +1,16 @@
 // File: Scripts/Core/MaskManager.cs
 using System;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace Visioneer.MaskPuzzle
 {
     /// <summary>
     /// Singleton manager that controls the current mask state.
     /// Broadcasts mask changes via event for all listeners.
+    /// Supports both Legacy Input and New Input System.
     /// </summary>
     public class MaskManager : MonoBehaviour
     {
@@ -44,7 +48,29 @@ namespace Visioneer.MaskPuzzle
 
         private void HandleMaskInput()
         {
-            // Press 0-3 to switch masks
+#if ENABLE_INPUT_SYSTEM
+            // New Input System
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null) return;
+
+            if (keyboard.digit0Key.wasPressedThisFrame || keyboard.numpad0Key.wasPressedThisFrame)
+            {
+                SetMask(MaskType.Off);
+            }
+            else if (keyboard.digit1Key.wasPressedThisFrame || keyboard.numpad1Key.wasPressedThisFrame)
+            {
+                SetMask(MaskType.MaskA);
+            }
+            else if (keyboard.digit2Key.wasPressedThisFrame || keyboard.numpad2Key.wasPressedThisFrame)
+            {
+                SetMask(MaskType.MaskB);
+            }
+            else if (keyboard.digit3Key.wasPressedThisFrame || keyboard.numpad3Key.wasPressedThisFrame)
+            {
+                SetMask(MaskType.MaskC);
+            }
+#else
+            // Legacy Input
             if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
             {
                 SetMask(MaskType.Off);
@@ -61,6 +87,7 @@ namespace Visioneer.MaskPuzzle
             {
                 SetMask(MaskType.MaskC);
             }
+#endif
         }
 
         /// <summary>

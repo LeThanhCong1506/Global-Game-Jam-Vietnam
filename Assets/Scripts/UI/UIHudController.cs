@@ -1,5 +1,6 @@
 // File: Scripts/UI/UIHudController.cs
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,21 +15,25 @@ namespace Visioneer.MaskPuzzle
         public static UIHudController Instance { get; private set; }
 
         [Header("Timer Display")]
-        [SerializeField] private Text timerText;
+        [SerializeField] private GameObject timer;
+        private TextMeshPro timerText;
         [SerializeField] private Image timerFillBar;
 
         [Header("Mask Display")]
-        [SerializeField] private Text maskText;
+        [SerializeField] private GameObject mask;
+        private TextMeshPro maskText;
         [SerializeField] private Image[] maskIndicators; // 4 indicators for Off, A, B, C
 
         [Header("Key Status")]
-        [SerializeField] private Text keyStatusText;
+        [SerializeField] private GameObject keyStatus;
+        private TextMeshPro keyStatusText;
         [SerializeField] private GameObject keyIcon;
         [SerializeField] private Color keyNotCollectedColor = Color.gray;
         [SerializeField] private Color keyCollectedColor = Color.yellow;
 
         [Header("Toast Messages")]
-        [SerializeField] private Text toastText;
+        [SerializeField] private GameObject toast;
+        private TextMeshPro toastText;
         [SerializeField] private CanvasGroup toastGroup;
         [SerializeField] private float toastFadeSpeed = 2f;
 
@@ -54,6 +59,12 @@ namespace Visioneer.MaskPuzzle
 
         private void Start()
         {
+            // Cache text components
+            timerText = timer.GetComponent<TextMeshPro>();
+            maskText = mask.GetComponent<TextMeshPro>();
+            keyStatusText = keyStatus.GetComponent<TextMeshPro>();
+            toastText = toast.GetComponent<TextMeshPro>();
+
             // Hide game over panels
             if (winPanel != null) winPanel.SetActive(false);
             if (losePanel != null) losePanel.SetActive(false);
@@ -190,12 +201,16 @@ namespace Visioneer.MaskPuzzle
             }
         }
 
-        // Helper to set text on either Unity Text or TMP
-        private void SetText(Text textComponent, string value)
+        // Replace the SetText helper to support both TextMeshPro and UnityEngine.UI.Text
+        private void SetText(Object textComponent, string value)
         {
-            if (textComponent != null)
+            if (textComponent is TMPro.TextMeshPro tmp)
             {
-                textComponent.text = value;
+                tmp.text = value;
+            }
+            else if (textComponent is UnityEngine.UI.Text uiText)
+            {
+                uiText.text = value;
             }
         }
 

@@ -2,12 +2,16 @@
 using System;
 using System.Collections;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace Visioneer.MaskPuzzle
 {
     /// <summary>
     /// Handles player movement on the tile grid.
     /// Click adjacent tile to move. Tile-step movement only.
+    /// Supports both Legacy Input and New Input System.
     /// </summary>
     public class PlayerGridMover : MonoBehaviour
     {
@@ -61,6 +65,23 @@ namespace Visioneer.MaskPuzzle
 
         private void HandleClickInput()
         {
+#if ENABLE_INPUT_SYSTEM
+            // New Input System
+            Mouse mouse = Mouse.current;
+            if (mouse == null) return;
+
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                Vector2 mousePos = mouse.position.ReadValue();
+                TileData clickedTile = GridManager.Instance?.RaycastToTile(mousePos);
+
+                if (clickedTile != null)
+                {
+                    TryMoveToTile(clickedTile);
+                }
+            }
+#else
+            // Legacy Input
             if (Input.GetMouseButtonDown(0))
             {
                 TileData clickedTile = GridManager.Instance?.RaycastToTile(Input.mousePosition);
@@ -70,6 +91,7 @@ namespace Visioneer.MaskPuzzle
                     TryMoveToTile(clickedTile);
                 }
             }
+#endif
         }
 
         /// <summary>
