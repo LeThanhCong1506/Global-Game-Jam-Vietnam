@@ -91,6 +91,13 @@ namespace Visioneer.MaskPuzzle
         {
             if (IsMoving || inputLocked) return;
 
+            // Ignore click on current tile (player already standing here)
+            if (targetTile.GridCoord == currentGridCoord)
+            {
+                Debug.Log("[PlayerGridMover] Clicked on current tile, ignoring");
+                return;
+            }
+
             // Check if adjacent
             if (!GridManager.Instance.AreAdjacent(currentGridCoord, targetTile.GridCoord))
             {
@@ -206,6 +213,55 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
+        /// Make player fall down and then respawn at start position.
+        /// Used when player triggers a trap.
+        /// </summary>
+        public void FallAndRespawn(float fallDistance = 10f, float fallSpeed = 8f)
+        {
+            StartCoroutine(FallAndRespawnCoroutine(fallDistance, fallSpeed));
+        }
+
+        private IEnumerator FallAndRespawnCoroutine(float fallDistance, float fallSpeed)
+        {
+            // Lock input during fall
+            inputLocked = true;
+            IsMoving = true;
+
+            Vector3 startPos = transform.position;
+            Vector3 endPos = startPos - Vector3.up * fallDistance;
+            float duration = fallDistance / fallSpeed;
+            float elapsed = 0f;
+
+            // Fall down with acceleration (easing in)
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                
+                // Ease in - starts slow, accelerates (simulates gravity)
+                float easedT = t * t;
+                
+                transform.position = Vector3.Lerp(startPos, endPos, easedT);
+                yield return null;
+            }
+
+            transform.position = endPos;
+
+            // Small delay at the bottom
+            yield return new WaitForSeconds(0.2f);
+
+            // Respawn at start
+            if (GridManager.Instance?.StartTile != null)
+            {
+                TeleportToTile(GridManager.Instance.StartTile);
+            }
+
+            // Unlock input
+            inputLocked = false;
+            IsMoving = false;
+        }
+
+        /// <summary>
         /// Lock/unlock input (used during island rotation, cutscenes, etc).
         /// </summary>
         public void SetInputLocked(bool locked)
@@ -219,3 +275,4 @@ namespace Visioneer.MaskPuzzle
         }
     }
 }
+

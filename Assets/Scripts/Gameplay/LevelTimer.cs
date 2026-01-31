@@ -16,10 +16,15 @@ namespace Visioneer.MaskPuzzle
         [Header("Timer Settings")]
         [SerializeField] private float startTime = 60f;
         [SerializeField] private float maskCExtraDrainPerSecond = 1f;
+        
+        [Header("Level Settings")]
+        [Tooltip("If true, timer will be disabled on the first level (build index 0)")]
+        [SerializeField] private bool disableOnFirstLevel = true;
 
         [Header("State")]
         [SerializeField] private float currentTime;
         [SerializeField] private bool isRunning = false;
+        [SerializeField] private bool isDisabledForLevel = false;
 
         // Events
         public static event Action<float> OnTimeUpdated; // Current time
@@ -28,6 +33,7 @@ namespace Visioneer.MaskPuzzle
         public float CurrentTime => currentTime;
         public float StartTime => startTime;
         public bool IsRunning => isRunning;
+        public bool IsDisabledForLevel => isDisabledForLevel;
 
         private void Awake()
         {
@@ -43,6 +49,16 @@ namespace Visioneer.MaskPuzzle
 
         private void Start()
         {
+            // Check if this is the first level
+            int currentLevelIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            isDisabledForLevel = disableOnFirstLevel && currentLevelIndex == 0;
+
+            if (isDisabledForLevel)
+            {
+                Debug.Log("[LevelTimer] Timer disabled for first level");
+                return;
+            }
+
             // Start timer when game starts
             if (GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing)
             {
@@ -74,7 +90,7 @@ namespace Visioneer.MaskPuzzle
 
         private void Update()
         {
-            if (!isRunning) return;
+            if (!isRunning || isDisabledForLevel) return;
 
             // Base drain
             float drain = Time.deltaTime;
