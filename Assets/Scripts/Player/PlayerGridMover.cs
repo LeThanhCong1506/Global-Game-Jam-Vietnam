@@ -91,6 +91,13 @@ namespace Visioneer.MaskPuzzle
         {
             if (IsMoving || inputLocked) return;
 
+            // Ignore click on current tile (player already standing here)
+            if (targetTile.GridCoord == currentGridCoord)
+            {
+                Debug.Log("[PlayerGridMover] Clicked on current tile, ignoring");
+                return;
+            }
+
             // Check if adjacent
             if (!GridManager.Instance.AreAdjacent(currentGridCoord, targetTile.GridCoord))
             {

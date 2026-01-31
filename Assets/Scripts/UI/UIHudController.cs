@@ -64,6 +64,24 @@ namespace Visioneer.MaskPuzzle
 
             // Initialize displays
             UpdateKeyStatus(false);
+
+            // Check if timer should be hidden for this level
+            StartCoroutine(CheckTimerVisibility());
+        }
+
+        private System.Collections.IEnumerator CheckTimerVisibility()
+        {
+            // Wait one frame for LevelTimer to initialize
+            yield return null;
+
+            if (LevelTimer.Instance != null && LevelTimer.Instance.IsDisabledForLevel)
+            {
+                // Hide timer UI elements
+                if (timerText != null) timerText.gameObject.SetActive(false);
+                if (timerFillBar != null) timerFillBar.gameObject.SetActive(false);
+                
+                Debug.Log("[UIHudController] Timer UI hidden for first level");
+            }
         }
 
         private void OnEnable()

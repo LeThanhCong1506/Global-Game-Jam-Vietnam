@@ -2433,11 +2433,56 @@ Transform:
   - {fileID: 1111665675}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1781276648 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-  m_PrefabInstance: {fileID: 4242501261107009023}
+--- !u!1 &1781276647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1781276648}
+  - component: {fileID: 1781276649}
+  m_Layer: 0
+  m_Name: TileGapAdjuster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1781276648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781276647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1980912585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1781276649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781276647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf070923708b3834ea895c6f0fc9cd72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.TileGapAdjuster
+  gapDistance: 0.1
+  clickAreaMultiplier: 1.3
+  clickColliderHeight: 0.5
+  adjustPositionsOnStart: 1
+  expandClickOnStart: 1
+  showDebugLogs: 1
 --- !u!1001 &1845361397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3224,63 +3269,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a4506f7b989c414ba91b6196f78d074, type: 3}
---- !u!1001 &4242501261107009023
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1980912585}
-    m_Modifications:
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2373734147871148717, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753671357750304471, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
-      propertyPath: m_Name
-      value: TileGapAdjuster
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e34b88e958d4bd341bc886fbde0b8b30, type: 3}
 --- !u!1001 &6558477495589422236
 PrefabInstance:
   m_ObjectHideFlags: 0

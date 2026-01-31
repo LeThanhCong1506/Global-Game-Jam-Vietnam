@@ -12,7 +12,8 @@ namespace Visioneer.MaskPuzzle
         [Header("Grid Settings")]
         [SerializeField] private int gridWidth = 5;
         [SerializeField] private int gridHeight = 5;
-        [SerializeField] private float tileSpacing = 1f;
+        [SerializeField] private float tileSize = 1f;
+        [SerializeField] private float tileGap = 0.1f; // Gap between tiles
 
         [Header("Special Tiles (Grid Coords)")]
         [SerializeField] private Vector2Int startCoord = new Vector2Int(0, 0);
@@ -51,9 +52,12 @@ namespace Visioneer.MaskPuzzle
                 for (int y = 0; y < gridHeight; y++)
                 {
                     Vector2Int coord = new Vector2Int(x, y);
-                    Vector3 worldPos = new Vector3(x * tileSpacing, 0, y * tileSpacing);
+                    // Position = coord * (tileSize + gap) for proper spacing
+                    float posX = x * tileSize + x * tileGap;
+                    float posZ = y * tileSize + y * tileGap;
+                    Vector3 worldPos = new Vector3(posX, 0, posZ);
 
-                    GameObject tile = TileFactory.CreateTile(coord, worldPos, tilesParent);
+                    GameObject tile = TileFactory.CreateTile(coord, worldPos, tilesParent, tileGap);
                     TileData data = tile.GetComponent<TileData>();
 
                     // Set special tile flags via reflection or serialized fields
@@ -108,9 +112,10 @@ namespace Visioneer.MaskPuzzle
             player.name = "Player";
             player.AddComponent<PlayerGridMover>();
 
-            // Position at start
-            Vector3 startPos = new Vector3(startCoord.x * tileSpacing, 0.5f, startCoord.y * tileSpacing);
-            player.transform.position = startPos;
+            // Position at start (using tileSize + gap formula)
+            float startPosX = startCoord.x * tileSize + startCoord.x * tileGap;
+            float startPosZ = startCoord.y * tileSize + startCoord.y * tileGap;
+            player.transform.position = new Vector3(startPosX, 0.5f, startPosZ);
 
             // Set different color
             Renderer rend = player.GetComponent<Renderer>();
@@ -142,9 +147,10 @@ namespace Visioneer.MaskPuzzle
             key.AddComponent<KeyPickup>();
             key.AddComponent<MaskVisibleGroup>();
 
-            // Position at key spawn
-            Vector3 keyPos = new Vector3(keyCoord.x * tileSpacing, 0.3f, keyCoord.y * tileSpacing);
-            key.transform.position = keyPos;
+            // Position at key spawn (using tileSize + gap formula)
+            float keyPosX = keyCoord.x * tileSize + keyCoord.x * tileGap;
+            float keyPosZ = keyCoord.y * tileSize + keyCoord.y * tileGap;
+            key.transform.position = new Vector3(keyPosX, 0.3f, keyPosZ);
 
             // Set golden color
             Renderer rend = key.GetComponent<Renderer>();
