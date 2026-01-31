@@ -134,15 +134,115 @@ namespace Visioneer.MaskPuzzle
             return false;
         }
 
+        /// <summary>
+        /// Check if all required keys for current level have been collected.
+        /// Hardcoded requirements:
+        /// - Level1: 0 keys (exit immediately)
+        /// - Level2: 0 keys (exit immediately)
+        /// - Level3: 1 key
+        /// - Level4: 2 keys
+        /// </summary>
+        private bool AreAllLevelKeysCollected()
+        {
+            // Get required keys for current exit
+            int requiredKeys = GetRequiredKeysForCurrentLevel();
+            
+            if (requiredKeys == 0)
+            {
+                Debug.Log($"[ExitDoor] No keys required for this level, exit allowed");
+                return true;
+            }
+
+            // Count collected keys in the level
+            GameObject parentLevel = GetParentLevelObject();
+            if (parentLevel == null)
+            {
+                // Fallback: count global collected keys
+                int globalCollected = CountAllCollectedKeys();
+                Debug.Log($"[ExitDoor] Keys collected: {globalCollected}/{requiredKeys}");
+                return globalCollected >= requiredKeys;
+            }
+
+            // Find all KeyPickup in this level
+            KeyPickup[] keysInLevel = parentLevel.GetComponentsInChildren<KeyPickup>(true);
+            int collectedCount = 0;
+            foreach (var key in keysInLevel)
+            {
+                if (key.IsCollected)
+                {
+                    collectedCount++;
+                }
+            }
+
+            Debug.Log($"[ExitDoor] Keys in {parentLevel.name}: {collectedCount}/{requiredKeys}");
+            return collectedCount >= requiredKeys;
+        }
+
+        /// <summary>
+        /// Get hardcoded required keys for current level.
+        /// Based on parent level name (Level1, Level2, Level3, Level4).
+        /// </summary>
+        private int GetRequiredKeysForCurrentLevel()
+        {
+            GameObject parentLevel = GetParentLevelObject();
+            string levelName = parentLevel != null ? parentLevel.name : "";
+            
+            Debug.Log($"[ExitDoor] Checking key requirement for: {levelName} (exitTouchCount={exitTouchCount})");
+            
+            // Hardcoded requirements based on level name
+            switch (levelName)
+            {
+                case "Level1": return 0;  // Level1: 0 keys
+                case "Level2": return 0;  // Level2: 0 keys
+                case "Level3": return 1;  // Level3: 1 key
+                case "Level4": return 2;  // Level4: 2 keys
+                default: return 0;
+            }
+        }
+
+        /// <summary>
+        /// Count all collected keys in the scene.
+        /// </summary>
+        private int CountAllCollectedKeys()
+        {
+            KeyPickup[] allKeys = FindObjectsOfType<KeyPickup>();
+            int count = 0;
+            foreach (var key in allKeys)
+            {
+                if (key.IsCollected) count++;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Get the parent level object (Level1, Level2, etc.)
+        /// </summary>
+        private GameObject GetParentLevelObject()
+        {
+            if (levelObject != null) return levelObject;
+
+            // Search parent hierarchy for LevelX
+            Transform parent = transform.parent;
+            while (parent != null)
+            {
+                if (parent.name.StartsWith("Level"))
+                {
+                    return parent.gameObject;
+                }
+                parent = parent.parent;
+            }
+            return null;
+        }
+
         private void TryExit()
         {
-            bool hasKey = KeyPickup.Instance != null && KeyPickup.Instance.IsCollected;
-
-            if (!hasKey)
+            // Check if all keys in this level are collected
+            if (!AreAllLevelKeysCollected())
             {
-                // Show locked message
-                Debug.Log("[ExitDoor] Door is locked! Find the key.");
-                UIHudController.Instance?.ShowToast("Door is locked! Find the key.", 2f);
+                GameObject parentLevel = GetParentLevelObject();
+                string levelName = parentLevel != null ? parentLevel.name : "this level";
+                Debug.Log($"[ExitDoor] Not all keys collected in {levelName}");
+                UIHudController.Instance?.ShowToast($"Collect all keys in {levelName}!", 2f);
                 SimpleAudioManager.Instance?.PlayLocked();
                 return;
             }

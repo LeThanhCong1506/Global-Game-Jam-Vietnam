@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -642,6 +642,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -4352,6 +4356,10 @@ PrefabInstance:
       value: Tile_3_2
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
       value: 3
       objectReference: {fileID: 0}
@@ -5648,7 +5656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -5952,7 +5960,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -6515,6 +6523,10 @@ PrefabInstance:
     - target: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_Name
       value: Tile_3_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
