@@ -79,6 +79,7 @@ namespace Visioneer.MaskPuzzle
         {
             Time.timeScale = 1f;
             TrapTile.ResetTrapHits(); // Reset trap hit counter
+            ExitDoor.ResetExitCount(); // Reset exit touch counter
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 

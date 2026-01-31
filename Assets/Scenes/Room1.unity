@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -642,6 +642,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -1848,8 +1852,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.ExitDoor
   exitTileData: {fileID: 220410535}
+  finalLevelName: Level4
+  levelObject: {fileID: 0}
+  levelAnimator: {fileID: 0}
+  animatorTriggerParam: 
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!4 &244948480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -2977,8 +2986,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.ExitDoor
   exitTileData: {fileID: 400404844}
+  finalLevelName: Level4
+  levelObject: {fileID: 1875682178}
+  levelAnimator: {fileID: 1875682180}
+  animatorTriggerParam: lev4
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!114 &400404844 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -4342,6 +4356,10 @@ PrefabInstance:
       value: Tile_3_2
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
       value: 3
       objectReference: {fileID: 0}
@@ -5638,7 +5656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -5942,7 +5960,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isKeySpawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
@@ -6384,6 +6402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1097574189}
+  - component: {fileID: 1097574190}
   m_Layer: 3
   m_Name: Level2
   m_TagString: Untagged
@@ -6400,7 +6419,7 @@ Transform:
   m_GameObject: {fileID: 1097574188}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 4}
+  m_LocalPosition: {x: 5, y: -6.97, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6431,6 +6450,28 @@ Transform:
   - {fileID: 1978307888}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1097574190
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097574188}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 876e821053efc024e84fa46d77dea062, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1107214439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6482,6 +6523,10 @@ PrefabInstance:
     - target: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_Name
       value: Tile_3_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: isKeySpawn
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
@@ -6612,8 +6657,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.ExitDoor
   exitTileData: {fileID: 1111665677}
+  finalLevelName: Level4
+  levelObject: {fileID: 1097574188}
+  levelAnimator: {fileID: 1097574190}
+  animatorTriggerParam: lev2
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!4 &1136410916 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -10573,9 +10623,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf070923708b3834ea895c6f0fc9cd72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.TileGapAdjuster
-  gapDistance: 0.1
   clickAreaMultiplier: 1.3
   clickColliderHeight: 0.5
+  gapDistance: 0.1
   adjustPositionsOnStart: 1
   expandClickOnStart: 1
   showDebugLogs: 1
@@ -10662,6 +10712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1725873872}
+  - component: {fileID: 1725873873}
   m_Layer: 3
   m_Name: Level3
   m_TagString: Untagged
@@ -10678,7 +10729,7 @@ Transform:
   m_GameObject: {fileID: 1725873871}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 8}
+  m_LocalPosition: {x: 10, y: -6.97, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10712,6 +10763,28 @@ Transform:
   - {fileID: 400404841}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1725873873
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725873871}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fdcbc03a988786d439759061e091e161, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1752701481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2854950749207006921, guid: 3ae1c75bd352aa94dba74d58a79d4559, type: 3}
@@ -11174,6 +11247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1875682179}
+  - component: {fileID: 1875682180}
   m_Layer: 3
   m_Name: Level4
   m_TagString: Untagged
@@ -11190,7 +11264,7 @@ Transform:
   m_GameObject: {fileID: 1875682178}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 12}
+  m_LocalPosition: {x: 15, y: -6.97, z: 12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11247,6 +11321,28 @@ Transform:
   - {fileID: 220410533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1875682180
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875682178}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a8e11e8ce25b0c14e81a2168fe7e2806, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1882356568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11577,8 +11673,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.ExitDoor
   exitTileData: {fileID: 1978307891}
+  finalLevelName: Level4
+  levelObject: {fileID: 1725873871}
+  levelAnimator: {fileID: 1725873873}
+  animatorTriggerParam: lev3
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!114 &1978307891 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -13781,6 +13882,10 @@ PrefabInstance:
     - target: {fileID: 1469167409349488816, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
       propertyPath: m_Name
       value: TimeText
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469167409349488816, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5036573992562803416, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
       propertyPath: m_fontAsset

@@ -14,8 +14,12 @@ namespace Visioneer.MaskPuzzle
         public static LevelTimer Instance { get; private set; }
 
         [Header("Timer Settings")]
-        [SerializeField] private float startTime = 60f;
+        [SerializeField] private float startTime = 360f; // 6 minutes
         [SerializeField] private float maskCExtraDrainPerSecond = 1f;
+        
+        [Header("Enable/Disable")]
+        [Tooltip("Completely disable the countdown timer")]
+        [SerializeField] private bool timerDisabled = true; // OFF by default
         
         [Header("Level Settings")]
         [Tooltip("If true, timer will be disabled on the first level (build index 0)")]
@@ -49,6 +53,14 @@ namespace Visioneer.MaskPuzzle
 
         private void Start()
         {
+            // Check if timer is completely disabled
+            if (timerDisabled)
+            {
+                isDisabledForLevel = true;
+                Debug.Log("[LevelTimer] Timer is disabled");
+                return;
+            }
+
             // Check if this is the first level
             int currentLevelIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
             isDisabledForLevel = disableOnFirstLevel && currentLevelIndex == 0;

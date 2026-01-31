@@ -10,10 +10,6 @@ namespace Visioneer.MaskPuzzle
     /// </summary>
     public class TileGapAdjuster : MonoBehaviour
     {
-        [Header("Gap Settings")]
-        [Tooltip("Gap distance to add between tiles")]
-        [SerializeField] private float gapDistance = 0.1f;
-
         [Header("Click Area Settings")]
         [Tooltip("How much larger the click area should be (1.0 = same size, 1.3 = 30% larger)")]
         [SerializeField] private float clickAreaMultiplier = 1.3f;
@@ -21,12 +17,17 @@ namespace Visioneer.MaskPuzzle
         [Tooltip("Height of the click collider")]
         [SerializeField] private float clickColliderHeight = 0.5f;
 
+        [Header("Gap Settings")]
+        [Tooltip("Gap multiplier to spread tiles apart (0.1 = 10% more spacing)")]
+        [SerializeField] private float gapDistance = 0.1f;
+
         [Header("Auto Run")]
+        [Tooltip("Spreads tiles apart on start - safe for manually placed tiles")]
         [SerializeField] private bool adjustPositionsOnStart = true;
         [SerializeField] private bool expandClickOnStart = true;
 
         [Header("Debug")]
-        [SerializeField] private bool showDebugLogs = true;
+        [SerializeField] private bool showDebugLogs = false;
 
         private void Start()
         {
@@ -60,28 +61,27 @@ namespace Visioneer.MaskPuzzle
 
             if (showDebugLogs)
             {
-                Debug.Log($"[TileGapAdjuster] Adjusted {allTiles.Length} tiles with gap: {gapDistance}");
+                Debug.Log($"[TileGapAdjuster] Adjusted {allTiles.Length} tiles with gap scale: {1f + gapDistance}");
             }
         }
 
         private void AdjustTilePosition(TileData tile)
         {
-            Vector2Int gridCoord = tile.GridCoord;
+            // Get current position
+            Vector3 currentPos = tile.transform.position;
             
-            // Calculate new position with gap
-            // Position = gridCoord * 1 (tile size) + gridCoord * gap
-            float newX = gridCoord.x + (gridCoord.x * gapDistance);
-            float newZ = gridCoord.y + (gridCoord.y * gapDistance);
+            // Scale the X and Z positions to add gap (multiply by 1 + gapDistance)
+            // This keeps relative positions but spreads tiles apart
+            float scaleMultiplier = 1f + gapDistance;
+            float newX = currentPos.x * scaleMultiplier;
+            float newZ = currentPos.z * scaleMultiplier;
 
-            // Keep original Y position (height)
-            float currentY = tile.transform.position.y;
-
-            Vector3 newPosition = new Vector3(newX, currentY, newZ);
+            Vector3 newPosition = new Vector3(newX, currentPos.y, newZ);
             tile.transform.position = newPosition;
 
             if (showDebugLogs)
             {
-                Debug.Log($"[TileGapAdjuster] Tile ({gridCoord.x},{gridCoord.y}) moved to {newPosition}");
+                Debug.Log($"[TileGapAdjuster] Tile ({tile.GridCoord.x},{tile.GridCoord.y}) spread from {currentPos} to {newPosition}");
             }
         }
 
