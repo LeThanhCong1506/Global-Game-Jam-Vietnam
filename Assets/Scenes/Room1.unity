@@ -678,6 +678,11 @@ MonoBehaviour:
   currentGridCoord: {x: 0, y: 0}
   invalidClickShakeDuration: 0.2
   invalidClickShakeIntensity: 0.1
+--- !u!1 &149662820 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+  m_PrefabInstance: {fileID: 1335527331}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &245683206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,6 +1551,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
   m_PrefabInstance: {fileID: 466294433}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &572807275 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+  m_PrefabInstance: {fileID: 1576638645}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &590746642
 GameObject:
@@ -3329,7 +3339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
@@ -3342,13 +3352,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1335527338}
   m_SourcePrefab: {fileID: 100100000, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
 --- !u!4 &1335527332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
   m_PrefabInstance: {fileID: 1335527331}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1335527338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149662820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb7073cc5cc6564ba0b70375dfaba67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.TrapTile
+  timePenalty: 5
+  tileData: {fileID: 0}
 --- !u!1 &1348826457
 GameObject:
   m_ObjectHideFlags: 0
@@ -4040,7 +4067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: isWalkable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: gridCoord.x
@@ -4053,13 +4080,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6019127951126421220, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1576638652}
   m_SourcePrefab: {fileID: 100100000, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
 --- !u!4 &1576638646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
   m_PrefabInstance: {fileID: 1576638645}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1576638652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572807275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb7073cc5cc6564ba0b70375dfaba67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.TrapTile
+  timePenalty: 5
+  tileData: {fileID: 0}
 --- !u!1 &1613565269
 GameObject:
   m_ObjectHideFlags: 0
@@ -4763,15 +4807,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa553e19291227348b5e8bcc3d05716c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.UIHudController
-  timer: {fileID: 1552636459}
+  timerText: {fileID: 0}
   timerFillBar: {fileID: 0}
-  mask: {fileID: 107147518}
+  maskText: {fileID: 0}
   maskIndicators: []
-  keyStatus: {fileID: 590746642}
+  keyStatusText: {fileID: 0}
   keyIcon: {fileID: 0}
   keyNotCollectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   keyCollectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  toast: {fileID: 1613565269}
+  toastText: {fileID: 0}
   toastGroup: {fileID: 1001189035}
   toastFadeSpeed: 2
   winPanel: {fileID: 1071046370}
