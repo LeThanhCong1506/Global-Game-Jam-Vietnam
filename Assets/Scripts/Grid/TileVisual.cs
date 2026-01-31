@@ -1,4 +1,5 @@
 // File: Scripts/Grid/TileVisual.cs
+using System.Collections;
 using UnityEngine;
 
 namespace Visioneer.MaskPuzzle
@@ -34,6 +35,8 @@ namespace Visioneer.MaskPuzzle
         private MaterialPropertyBlock propertyBlock;
         private static readonly int ColorProperty = Shader.PropertyToID("_Color");
         private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
+
+        private Coroutine flashCoroutine;
 
         private void Awake()
         {
@@ -142,5 +145,40 @@ namespace Visioneer.MaskPuzzle
                 UpdateVisual(MaskManager.Instance.CurrentMask);
             }
         }
+
+        /// <summary>
+        /// Flash the tile with a specific color for a duration, then restore to normal.
+        /// </summary>
+        public void FlashColor(Color flashColor, float duration)
+        {
+            // Stop any existing flash
+            if (flashCoroutine != null)
+            {
+                StopCoroutine(flashCoroutine);
+            }
+            flashCoroutine = StartCoroutine(FlashColorCoroutine(flashColor, duration));
+        }
+
+        private IEnumerator FlashColorCoroutine(Color flashColor, float duration)
+        {
+            // Apply flash color
+            ApplyColor(flashColor);
+
+            // Wait for duration
+            yield return new WaitForSeconds(duration);
+
+            // Restore to current mask color
+            if (MaskManager.Instance != null)
+            {
+                UpdateVisual(MaskManager.Instance.CurrentMask);
+            }
+            else
+            {
+                ApplyColor(defaultColor);
+            }
+
+            flashCoroutine = null;
+        }
     }
 }
+

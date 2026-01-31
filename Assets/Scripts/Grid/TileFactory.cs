@@ -9,16 +9,22 @@ namespace Visioneer.MaskPuzzle
     /// </summary>
     public static class TileFactory
     {
+        // Default gap between tiles
+        public static float DefaultTileGap = 0.1f;
+
         /// <summary>
         /// Create a single tile at world position.
         /// </summary>
-        public static GameObject CreateTile(Vector2Int gridCoord, Vector3 worldPos, Transform parent = null)
+        public static GameObject CreateTile(Vector2Int gridCoord, Vector3 worldPos, Transform parent = null, float tileGap = 0.1f)
         {
             // Create cube primitive
             GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
             tile.name = $"Tile_{gridCoord.x}_{gridCoord.y}";
             tile.transform.position = worldPos;
-            tile.transform.localScale = new Vector3(0.95f, 0.2f, 0.95f);
+            
+            // Scale tile to be smaller to show gap (1 - gap = visible tile size)
+            float tileScale = 1f - tileGap;
+            tile.transform.localScale = new Vector3(tileScale, 0.2f, tileScale);
 
             if (parent != null)
             {
@@ -35,17 +41,20 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
-        /// Create a grid of tiles.
+        /// Create a grid of tiles with gap between them.
         /// </summary>
-        public static void CreateGrid(int width, int height, float tileSpacing, Transform parent = null)
+        public static void CreateGrid(int width, int height, float tileSize = 1f, float tileGap = 0.1f, Transform parent = null)
         {
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     Vector2Int coord = new Vector2Int(x, y);
-                    Vector3 worldPos = new Vector3(x * tileSpacing, 0, y * tileSpacing);
-                    CreateTile(coord, worldPos, parent);
+                    // Position = coord * tileSize + coord * gap
+                    float posX = x * tileSize + x * tileGap;
+                    float posZ = y * tileSize + y * tileGap;
+                    Vector3 worldPos = new Vector3(posX, 0, posZ);
+                    CreateTile(coord, worldPos, parent, tileGap);
                 }
             }
         }

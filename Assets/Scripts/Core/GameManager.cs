@@ -78,6 +78,7 @@ namespace Visioneer.MaskPuzzle
         public void RestartLevel()
         {
             Time.timeScale = 1f;
+            TrapTile.ResetTrapHits(); // Reset trap hit counter
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 

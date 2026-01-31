@@ -5,7 +5,12 @@ namespace Visioneer.MaskPuzzle
 {
     /// <summary>
     /// Enum defining all available mask types in the game.
-    /// OFF = default view, A = walkable paths, B = traps, C = hidden objects (drains timer faster).
+    /// OFF = default view, A = walkable paths, B = traps, C = hidden objects.
+    /// 
+    /// Usage Rules:
+    /// - Mask A: Can be used 2 times, each use allows 10 steps before auto-deactivating
+    /// - Mask B: Can be used 1 time only  
+    /// - Mask C: Drains timer faster while active
     /// </summary>
     [Serializable]
     public enum MaskType
