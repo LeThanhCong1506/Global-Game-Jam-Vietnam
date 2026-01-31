@@ -98,6 +98,42 @@ namespace Visioneer.MaskPuzzle
             Debug.Log("[ExitDoor] Exit touch count reset to 0");
         }
 
+        /// <summary>
+        /// Get the expected level name based on exit touch count.
+        /// Exit #1 → Level1, Exit #2 → Level2, etc.
+        /// </summary>
+        private string GetExpectedLevelName()
+        {
+            return $"Level{exitTouchCount + 1}";
+        }
+
+        /// <summary>
+        /// Check if this exit is a child of the expected level.
+        /// </summary>
+        private bool IsCorrectLevelExit()
+        {
+            string expectedLevel = GetExpectedLevelName();
+            
+            // Check if levelObject matches expected level
+            if (levelObject != null && levelObject.name == expectedLevel)
+            {
+                return true;
+            }
+            
+            // Check if this exit is a child of the expected level
+            Transform parent = transform.parent;
+            while (parent != null)
+            {
+                if (parent.name == expectedLevel)
+                {
+                    return true;
+                }
+                parent = parent.parent;
+            }
+            
+            return false;
+        }
+
         private void TryExit()
         {
             bool hasKey = KeyPickup.Instance != null && KeyPickup.Instance.IsCollected;
@@ -111,6 +147,17 @@ namespace Visioneer.MaskPuzzle
                 return;
             }
 
+            // Check if this exit is the correct one for current count
+            // Exit #1 must be in Level1, Exit #2 in Level2, etc.
+            if (!IsCorrectLevelExit())
+            {
+                string expected = GetExpectedLevelName();
+                Debug.Log($"[ExitDoor] Wrong exit! Expected exit in {expected}");
+                UIHudController.Instance?.ShowToast($"Wrong exit! Find the exit in {expected}", 2f);
+                SimpleAudioManager.Instance?.PlayInvalid();
+                return;
+            }
+
             // Increment exit touch counter
             exitTouchCount++;
             Debug.Log($"[ExitDoor] Exit touched! Count: {exitTouchCount}/{requiredExitCount}");
@@ -118,13 +165,15 @@ namespace Visioneer.MaskPuzzle
             // Play level animation
             PlayLevelAnimation();
 
+            // Play win sound on every exit touch
+            SimpleAudioManager.Instance?.PlayWin();
+
             // Check if this is the final exit (4th touch)
             if (exitTouchCount >= requiredExitCount)
             {
                 // 4th exit - trigger WIN!
                 Debug.Log($"[ExitDoor] Player reached exit #{exitTouchCount} - WIN!");
                 OnPlayerExited?.Invoke();
-                SimpleAudioManager.Instance?.PlayWin();
                 GameManager.Instance?.SetGameState(GameState.Win);
             }
             else
@@ -133,6 +182,9 @@ namespace Visioneer.MaskPuzzle
                 Debug.Log($"[ExitDoor] Exit #{exitTouchCount} complete! Moving to next area...");
                 OnLevelCompleted?.Invoke();
                 UIHudController.Instance?.ShowToast($"Area {exitTouchCount} Complete!", 2f);
+                
+                // Grant double move ability (move 2 tiles once)
+                PlayerGridMover.Instance?.GrantDoubleMove();
             }
         }
 

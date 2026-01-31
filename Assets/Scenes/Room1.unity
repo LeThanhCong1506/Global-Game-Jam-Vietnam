@@ -1854,6 +1854,7 @@ MonoBehaviour:
   animatorTriggerParam: 
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!4 &244948480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -2987,6 +2988,7 @@ MonoBehaviour:
   animatorTriggerParam: lev4
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!114 &400404844 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -6649,6 +6651,7 @@ MonoBehaviour:
   animatorTriggerParam: lev2
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!4 &1136410916 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -11664,6 +11667,7 @@ MonoBehaviour:
   animatorTriggerParam: lev3
   lockedIndicator: {fileID: 0}
   unlockedIndicator: {fileID: 0}
+  requiredExitCount: 4
 --- !u!114 &1978307891 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6982560363880387946, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
@@ -13866,6 +13870,10 @@ PrefabInstance:
     - target: {fileID: 1469167409349488816, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
       propertyPath: m_Name
       value: TimeText
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469167409349488816, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5036573992562803416, guid: be73147b7de2eed41bd97a0c4b4cfd32, type: 3}
       propertyPath: m_fontAsset

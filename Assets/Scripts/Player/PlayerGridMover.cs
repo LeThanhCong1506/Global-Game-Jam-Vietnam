@@ -34,6 +34,19 @@ namespace Visioneer.MaskPuzzle
         public Vector2Int CurrentGridCoord => currentGridCoord;
         public bool IsMoving { get; private set; }
         private bool inputLocked = false;
+        
+        // Double move ability - granted after touching exit
+        private bool canMove2Tiles = false;
+        public bool CanMove2Tiles => canMove2Tiles;
+        
+        /// <summary>
+        /// Grant one-time ability to move 2 tiles. Called after touching exit.
+        /// </summary>
+        public void GrantDoubleMove()
+        {
+            canMove2Tiles = true;
+            Debug.Log("[PlayerGridMover] Double move granted!");
+        }
 
         private void Awake()
         {
@@ -85,23 +98,37 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
+        /// Calculate Manhattan distance between two grid coordinates.
+        /// </summary>
+        private int GetManhattanDistance(Vector2Int a, Vector2Int b)
+        {
+            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+        }
+
+        /// <summary>
         /// Attempt to move to clicked tile.
+        /// Player can only move 1 tile at a time (adjacent tiles by position).
         /// </summary>
         public void TryMoveToTile(TileData targetTile)
         {
             if (IsMoving || inputLocked) return;
 
-            // Ignore click on current tile (player already standing here)
-            if (targetTile.GridCoord == currentGridCoord)
+            // Get current tile by finding tile closest to player position
+            TileData currentTile = GetCurrentTile();
+
+            // Ignore click on same tile
+            if (targetTile == currentTile)
             {
                 Debug.Log("[PlayerGridMover] Clicked on current tile, ignoring");
                 return;
             }
 
-            // Check if adjacent
-            if (!GridManager.Instance.AreAdjacent(currentGridCoord, targetTile.GridCoord))
+            // Check if adjacent by world position (1.5f tolerance for touching tiles)
+            bool isAdjacent = GridManager.Instance.AreTilesAdjacentByPosition(currentTile, targetTile, 1.5f);
+            
+            if (!isAdjacent)
             {
-                HandleInvalidMove("Not adjacent");
+                HandleInvalidMove("Move 1 tile at a time");
                 return;
             }
 
@@ -112,8 +139,32 @@ namespace Visioneer.MaskPuzzle
                 return;
             }
 
+            // Update current grid coord for tracking
+            currentGridCoord = targetTile.GridCoord;
+
             // Start movement
             StartCoroutine(MoveToTileCoroutine(targetTile));
+        }
+
+        /// <summary>
+        /// Get the tile the player is currently standing on based on position.
+        /// </summary>
+        private TileData GetCurrentTile()
+        {
+            TileData[] allTiles = FindObjectsOfType<TileData>();
+            TileData closest = null;
+            float closestDist = float.MaxValue;
+
+            foreach (var tile in allTiles)
+            {
+                float dist = Vector3.Distance(transform.position, tile.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = tile;
+                }
+            }
+            return closest;
         }
 
         private IEnumerator MoveToTileCoroutine(TileData targetTile)

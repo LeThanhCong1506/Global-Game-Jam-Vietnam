@@ -126,6 +126,7 @@ namespace Visioneer.MaskPuzzle
 
         /// <summary>
         /// Check if two coordinates are adjacent (Manhattan distance = 1).
+        /// Based on GridCoord values.
         /// </summary>
         public bool AreAdjacent(Vector2Int a, Vector2Int b)
         {
@@ -135,8 +136,28 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
+        /// Check if two tiles are adjacent by their actual world positions.
+        /// Uses a tolerance to account for non-standard grid layouts.
+        /// </summary>
+        public bool AreTilesAdjacentByPosition(TileData tileA, TileData tileB, float maxDistance = 2f)
+        {
+            if (tileA == null || tileB == null) return false;
+            
+            Vector3 posA = tileA.transform.position;
+            Vector3 posB = tileB.transform.position;
+            
+            // Calculate distance on XZ plane (ignore Y height)
+            float dx = Mathf.Abs(posA.x - posB.x);
+            float dz = Mathf.Abs(posA.z - posB.z);
+            float distance = Mathf.Sqrt(dx * dx + dz * dz);
+            
+            return distance <= maxDistance;
+        }
+
+        /// <summary>
         /// Raycast from screen position to find tile.
         /// Uses RaycastAll to find tile even if other objects are in front.
+        /// Works for wide maps - no distance limit.
         /// </summary>
         public TileData RaycastToTile(Vector3 screenPosition, Camera camera = null)
         {
@@ -146,7 +167,9 @@ namespace Visioneer.MaskPuzzle
             }
 
             Ray ray = camera.ScreenPointToRay(screenPosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray, 100f, tileLayerMask);
+            
+            // Use Mathf.Infinity for very wide maps, raycast all layers
+            RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
 
             // Find the first hit that has a TileData component
             foreach (var hit in hits)
