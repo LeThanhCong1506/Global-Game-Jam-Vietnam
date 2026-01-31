@@ -3289,6 +3289,18 @@ PrefabInstance:
       propertyPath: defaultMaterial
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.b
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.g
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.r
+      value: 0.5019608
+      objectReference: {fileID: 0}
     - target: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -4017,6 +4029,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1780322188}
     m_Modifications:
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.b
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.g
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 431061673370302686, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
+      propertyPath: walkableHighlightColor.r
+      value: 0.5019608
+      objectReference: {fileID: 0}
     - target: {fileID: 5468460908992079060, guid: 2c8d0c9c9ba49354cab19323613645e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -4807,15 +4831,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa553e19291227348b5e8bcc3d05716c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Visioneer.MaskPuzzle.UIHudController
-  timerText: {fileID: 0}
+  timerText: {fileID: 1552636461}
   timerFillBar: {fileID: 0}
-  maskText: {fileID: 0}
+  maskText: {fileID: 590746644}
   maskIndicators: []
-  keyStatusText: {fileID: 0}
+  keyStatusText: {fileID: 590746644}
   keyIcon: {fileID: 0}
   keyNotCollectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   keyCollectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  toastText: {fileID: 0}
+  toastText: {fileID: 1613565271}
   toastGroup: {fileID: 1001189035}
   toastFadeSpeed: 2
   winPanel: {fileID: 1071046370}

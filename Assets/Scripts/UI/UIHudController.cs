@@ -8,34 +8,30 @@ namespace Visioneer.MaskPuzzle
 {
     /// <summary>
     /// HUD controller showing mask state, timer, key status, and toast messages.
-    /// Supports both Unity UI Text and TextMeshPro via wrapper approach.
+    /// Uses TextMeshProUGUI for Canvas UI text elements.
     /// </summary>
     public class UIHudController : MonoBehaviour
     {
         public static UIHudController Instance { get; private set; }
 
         [Header("Timer Display")]
-        [SerializeField] private GameObject timer;
-        private TextMeshPro timerText;
+        [SerializeField] private TextMeshProUGUI timerText;
         [SerializeField] private Image timerFillBar;
 
         [Header("Mask Display")]
-        [SerializeField] private GameObject mask;
-        private TextMeshPro maskText;
-        [SerializeField] private Image[] maskIndicators; // 4 indicators for Off, A, B, C
+        [SerializeField] private TextMeshProUGUI maskText;
+        [SerializeField] private Image[] maskIndicators;
 
         [Header("Key Status")]
-        [SerializeField] private GameObject keyStatus;
-        private TextMeshPro keyStatusText;
+        [SerializeField] private TextMeshProUGUI keyStatusText;
         [SerializeField] private GameObject keyIcon;
         [SerializeField] private Color keyNotCollectedColor = Color.gray;
         [SerializeField] private Color keyCollectedColor = Color.yellow;
 
         [Header("Toast Messages")]
-        [SerializeField] private GameObject toast;
-        private TextMeshPro toastText;
+        [SerializeField] private TextMeshProUGUI toastText;
         [SerializeField] private CanvasGroup toastGroup;
-        [SerializeField] private float toastFadeSpeed = 2f;
+        [SerializeField] private float toastFadeSpeed = 3f;
 
         [Header("Game Over Panels")]
         [SerializeField] private GameObject winPanel;
@@ -59,12 +55,6 @@ namespace Visioneer.MaskPuzzle
 
         private void Start()
         {
-            // Cache text components
-            timerText = timer.GetComponent<TextMeshPro>();
-            maskText = mask.GetComponent<TextMeshPro>();
-            keyStatusText = keyStatus.GetComponent<TextMeshPro>();
-            toastText = toast.GetComponent<TextMeshPro>();
-
             // Hide game over panels
             if (winPanel != null) winPanel.SetActive(false);
             if (losePanel != null) losePanel.SetActive(false);
@@ -93,7 +83,10 @@ namespace Visioneer.MaskPuzzle
         private void OnMaskChanged(MaskType newMask)
         {
             // Update mask text
-            SetText(maskText, $"Mask: {GetMaskDisplayName(newMask)}");
+            if (maskText != null)
+            {
+                maskText.text = $"Mask: {GetMaskDisplayName(newMask)}";
+            }
 
             // Update mask indicators
             if (maskIndicators != null)
@@ -122,17 +115,17 @@ namespace Visioneer.MaskPuzzle
 
         private void OnTimeUpdated(float time)
         {
-            // Update timer text
             int minutes = Mathf.FloorToInt(time / 60f);
             int seconds = Mathf.FloorToInt(time % 60f);
-            SetText(timerText, $"{minutes:00}:{seconds:00}");
+            
+            if (timerText != null)
+            {
+                timerText.text = $"{minutes:00}:{seconds:00}";
+            }
 
-            // Update fill bar
             if (timerFillBar != null && LevelTimer.Instance != null)
             {
                 timerFillBar.fillAmount = time / LevelTimer.Instance.StartTime;
-
-                // Change color when low
                 timerFillBar.color = time < 10f ? Color.red : Color.white;
             }
         }
@@ -148,7 +141,10 @@ namespace Visioneer.MaskPuzzle
         /// </summary>
         public void UpdateKeyStatus(bool collected)
         {
-            SetText(keyStatusText, collected ? "Key: COLLECTED" : "Key: Not Found");
+            if (keyStatusText != null)
+            {
+                keyStatusText.text = collected ? "Key: COLLECTED" : "Key: Not Found";
+            }
 
             if (keyIcon != null)
             {
@@ -165,6 +161,8 @@ namespace Visioneer.MaskPuzzle
         /// </summary>
         public void ShowToast(string message, float duration = 2f)
         {
+            Debug.Log($"[UIHudController] ShowToast: {message}");
+            
             if (toastCoroutine != null)
             {
                 StopCoroutine(toastCoroutine);
@@ -174,11 +172,21 @@ namespace Visioneer.MaskPuzzle
 
         private IEnumerator ToastCoroutine(string message, float duration)
         {
-            SetText(toastText, message);
+            // Set toast text
+            if (toastText != null)
+            {
+                toastText.text = message;
+            }
+            else
+            {
+                Debug.LogError("[UIHudController] toastText is NULL!");
+                yield break;
+            }
 
             // Fade in
             if (toastGroup != null)
             {
+                toastGroup.alpha = 0;
                 while (toastGroup.alpha < 1)
                 {
                     toastGroup.alpha += Time.deltaTime * toastFadeSpeed;
@@ -198,19 +206,6 @@ namespace Visioneer.MaskPuzzle
                     yield return null;
                 }
                 toastGroup.alpha = 0;
-            }
-        }
-
-        // Replace the SetText helper to support both TextMeshPro and UnityEngine.UI.Text
-        private void SetText(Object textComponent, string value)
-        {
-            if (textComponent is TMPro.TextMeshPro tmp)
-            {
-                tmp.text = value;
-            }
-            else if (textComponent is UnityEngine.UI.Text uiText)
-            {
-                uiText.text = value;
             }
         }
 
