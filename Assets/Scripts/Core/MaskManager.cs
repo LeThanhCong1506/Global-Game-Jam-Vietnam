@@ -46,6 +46,10 @@ namespace Visioneer.MaskPuzzle
         [Tooltip("How many times Mask B can be activated")]
         [SerializeField] private int maskBMaxUses = 1;
 
+        [Header("Level Settings")]
+        [Tooltip("Mask usage limits only apply from this level onwards (0 = level 1, 2 = level 3)")]
+        [SerializeField] private int limitStartFromLevel = 2; // Level 3 = build index 2
+
         // Runtime state for Mask A
         private int maskAUsesRemaining;
         private int maskAStepsRemaining;
@@ -63,6 +67,16 @@ namespace Visioneer.MaskPuzzle
         public int MaskBUsesRemaining => maskBUsesRemaining;
         public float MaskTimeRemaining => maskTimeRemaining;
         public float MaxMaskDuration => maxMaskDuration;
+        
+        // Check if current level has unlimited mask usage
+        public bool IsUnlimitedMaskUsage
+        {
+            get
+            {
+                int currentLevel = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+                return currentLevel < limitStartFromLevel;
+            }
+        }
 
         private void Awake()
         {
@@ -207,7 +221,7 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
-        /// Try to activate Mask A. Only succeeds if uses remain.
+        /// Try to activate Mask A. Only succeeds if uses remain (or unlimited on early levels).
         /// </summary>
         private void TryActivateMaskA()
         {
@@ -215,6 +229,14 @@ namespace Visioneer.MaskPuzzle
             if (currentMask == MaskType.MaskA)
             {
                 SetMask(MaskType.Off);
+                return;
+            }
+
+            // Check if unlimited usage on this level
+            if (IsUnlimitedMaskUsage)
+            {
+                Debug.Log("[MaskManager] Mask A activated (unlimited mode)");
+                SetMask(MaskType.MaskA);
                 return;
             }
 
@@ -237,7 +259,7 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
-        /// Try to activate Mask B. Only succeeds if uses remain.
+        /// Try to activate Mask B. Only succeeds if uses remain (or unlimited on early levels).
         /// </summary>
         private void TryActivateMaskB()
         {
@@ -245,6 +267,14 @@ namespace Visioneer.MaskPuzzle
             if (currentMask == MaskType.MaskB)
             {
                 SetMask(MaskType.Off);
+                return;
+            }
+
+            // Check if unlimited usage on this level
+            if (IsUnlimitedMaskUsage)
+            {
+                Debug.Log("[MaskManager] Mask B activated (unlimited mode)");
+                SetMask(MaskType.MaskB);
                 return;
             }
 
