@@ -269,10 +269,21 @@ namespace Visioneer.MaskPuzzle
         /// </summary>
         public void FallAndRespawn(float fallDistance = 10f, float fallSpeed = 8f)
         {
-            StartCoroutine(FallAndRespawnCoroutine(fallDistance, fallSpeed));
+            // Use global start tile
+            TileData respawnTile = GridManager.Instance?.StartTile;
+            StartCoroutine(FallAndRespawnCoroutine(fallDistance, fallSpeed, respawnTile));
+        }
+        
+        /// <summary>
+        /// Make player fall down and then respawn at a specific tile.
+        /// Used for level-specific trap respawn.
+        /// </summary>
+        public void FallAndRespawn(TileData respawnTile, float fallDistance = 10f, float fallSpeed = 8f)
+        {
+            StartCoroutine(FallAndRespawnCoroutine(fallDistance, fallSpeed, respawnTile));
         }
 
-        private IEnumerator FallAndRespawnCoroutine(float fallDistance, float fallSpeed)
+        private IEnumerator FallAndRespawnCoroutine(float fallDistance, float fallSpeed, TileData respawnTile)
         {
             // Lock input during fall
             inputLocked = true;
@@ -301,10 +312,11 @@ namespace Visioneer.MaskPuzzle
             // Small delay at the bottom
             yield return new WaitForSeconds(0.2f);
 
-            // Respawn at start
-            if (GridManager.Instance?.StartTile != null)
+            // Respawn at specified tile or fallback to global start
+            TileData targetTile = respawnTile ?? GridManager.Instance?.StartTile;
+            if (targetTile != null)
             {
-                TeleportToTile(GridManager.Instance.StartTile);
+                TeleportToTile(targetTile);
             }
 
             // Unlock input

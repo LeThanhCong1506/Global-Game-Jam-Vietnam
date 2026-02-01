@@ -19,20 +19,57 @@ namespace Visioneer.MaskPuzzle
 
         [Header("Visual")]
         [SerializeField] private GameObject keyVisual;
+        
+        [Header("Level Settings")]
+        [Tooltip("Level index this key belongs to (1-4). If 0, auto-detects from parent.")]
+        [SerializeField] private int levelIndex = 0;
 
-        // Event when any key is collected
+        // Event when any key is collected (passes level index)
+        public static event Action<int> OnKeyCollectedInLevel;
+        // Legacy event for backward compatibility
         public static event Action OnKeyCollected;
 
         public bool IsCollected => isCollected;
+        public int LevelIndex => levelIndex;
 
         private void Awake()
         {
+            // Auto-detect level from parent if not set
+            if (levelIndex == 0)
+            {
+                levelIndex = DetectLevelFromParent();
+            }
+            
             // Ensure MaskVisibleGroup is set up for Mask C only
             MaskVisibleGroup mvg = GetComponent<MaskVisibleGroup>();
             if (mvg == null)
             {
                 Debug.LogWarning($"[KeyPickup] {gameObject.name}: No MaskVisibleGroup found. Key may be always visible.");
             }
+        }
+        
+        /// <summary>
+        /// Detect level index from parent hierarchy (Level1, Level2, etc.)
+        /// </summary>
+        private int DetectLevelFromParent()
+        {
+            Transform parent = transform.parent;
+            while (parent != null)
+            {
+                if (parent.name.StartsWith("Level"))
+                {
+                    // Parse number from "Level3" => 3
+                    string levelName = parent.name;
+                    if (int.TryParse(levelName.Substring(5), out int level))
+                    {
+                        Debug.Log($"[KeyPickup] Auto-detected level {level} from parent {levelName}");
+                        return level;
+                    }
+                }
+                parent = parent.parent;
+            }
+            Debug.LogWarning("[KeyPickup] Could not detect level from parent, defaulting to 1");
+            return 1;
         }
 
         private void OnEnable()
