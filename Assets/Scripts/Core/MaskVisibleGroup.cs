@@ -26,6 +26,12 @@ namespace Visioneer.MaskPuzzle
         [SerializeField] private Collider[] colliders;
 
         private bool isVisible = true;
+        
+        /// <summary>
+        /// When true, this object stays hidden regardless of mask state.
+        /// Used for collected keys that should not reappear.
+        /// </summary>
+        private bool isPermanentlyHidden = false;
 
         private void Awake()
         {
@@ -58,6 +64,17 @@ namespace Visioneer.MaskPuzzle
 
         public void OnMaskChanged(MaskType newMask)
         {
+            // If permanently hidden (e.g., collected key), stay hidden
+            if (isPermanentlyHidden)
+            {
+                if (isVisible)
+                {
+                    isVisible = false;
+                    SetVisibility(false);
+                }
+                return;
+            }
+            
             bool shouldBeVisible = ShouldBeVisible(newMask);
 
             if (isVisible != shouldBeVisible)
@@ -105,7 +122,31 @@ namespace Visioneer.MaskPuzzle
         /// </summary>
         public bool IsCurrentlyVisible()
         {
-            return isVisible;
+            return isVisible && !isPermanentlyHidden;
+        }
+        
+        /// <summary>
+        /// Permanently hide this object regardless of mask state.
+        /// Call this when a key is collected.
+        /// </summary>
+        public void SetPermanentlyHidden()
+        {
+            isPermanentlyHidden = true;
+            isVisible = false;
+            SetVisibility(false);
+        }
+        
+        /// <summary>
+        /// Reset permanently hidden state (for game restart).
+        /// </summary>
+        public void ResetPermanentlyHidden()
+        {
+            isPermanentlyHidden = false;
+            // Re-apply current mask visibility
+            if (MaskManager.Instance != null)
+            {
+                OnMaskChanged(MaskManager.Instance.CurrentMask);
+            }
         }
     }
 }
