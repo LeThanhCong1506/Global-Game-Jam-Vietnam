@@ -100,6 +100,52 @@ namespace Visioneer.MaskPuzzle
         }
 
         /// <summary>
+        /// Find the start tile within this trap's level (parent hierarchy).
+        /// Searches for TileData with IsStart=true under the same LevelX parent.
+        /// </summary>
+        private TileData GetLevelStartTile()
+        {
+            // Find parent level object (LevelX)
+            Transform levelParent = FindLevelParent();
+            if (levelParent == null)
+            {
+                Debug.LogWarning("[TrapTile] No Level parent found, using global start");
+                return GridManager.Instance?.StartTile;
+            }
+
+            // Search for start tile within this level
+            TileData[] tilesInLevel = levelParent.GetComponentsInChildren<TileData>();
+            foreach (var tile in tilesInLevel)
+            {
+                if (tile.IsStart)
+                {
+                    Debug.Log($"[TrapTile] Found level start tile in {levelParent.name}");
+                    return tile;
+                }
+            }
+
+            Debug.LogWarning($"[TrapTile] No start tile found in {levelParent.name}, using global start");
+            return GridManager.Instance?.StartTile;
+        }
+
+        /// <summary>
+        /// Find the parent Level object (Level1, Level2, etc.)
+        /// </summary>
+        private Transform FindLevelParent()
+        {
+            Transform parent = transform.parent;
+            while (parent != null)
+            {
+                if (parent.name.StartsWith("Level"))
+                {
+                    return parent;
+                }
+                parent = parent.parent;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Flash the trap tile red using TileVisual.
         /// </summary>
         private void FlashRed()
@@ -134,10 +180,11 @@ namespace Visioneer.MaskPuzzle
                 // Show UI message (no lives info on first level)
                 UIHudController.Instance?.ShowToast("Trap triggered! Returned to start.", 2f);
 
-                // Player falls and respawns at start
+                // Player falls and respawns at level-specific start
                 if (PlayerGridMover.Instance != null)
                 {
-                    PlayerGridMover.Instance.FallAndRespawn(10f, 8f);
+                    TileData levelStart = GetLevelStartTile();
+                    PlayerGridMover.Instance.FallAndRespawn(levelStart, 10f, 8f);
                 }
                 return;
             }
@@ -183,10 +230,11 @@ namespace Visioneer.MaskPuzzle
             int remainingLives = maxTrapHits - currentTrapHits;
             UIHudController.Instance?.ShowToast($"Trap triggered! Lives remaining: {remainingLives}", 2f);
 
-            // Player falls and respawns at start
+            // Player falls and respawns at level-specific start
             if (PlayerGridMover.Instance != null)
             {
-                PlayerGridMover.Instance.FallAndRespawn(10f, 8f);
+                TileData levelStart = GetLevelStartTile();
+                PlayerGridMover.Instance.FallAndRespawn(levelStart, 10f, 8f);
             }
         }
     }

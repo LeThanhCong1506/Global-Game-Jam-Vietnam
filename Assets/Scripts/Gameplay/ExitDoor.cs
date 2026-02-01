@@ -134,84 +134,57 @@ namespace Visioneer.MaskPuzzle
             return false;
         }
 
+        // Static counter for total keys collected (shared across all levels)
+        private static int totalKeysCollected = 0;
+
         /// <summary>
-        /// Check if all required keys for current level have been collected.
-        /// Hardcoded requirements:
-        /// - Level1: 0 keys (exit immediately)
-        /// - Level2: 0 keys (exit immediately)
-        /// - Level3: 1 key
-        /// - Level4: 2 keys
+        /// Reset the key counter (call at game start/restart)
         /// </summary>
-        private bool AreAllLevelKeysCollected()
+        public static void ResetKeyCount()
         {
-            // Get required keys for current exit
-            int requiredKeys = GetRequiredKeysForCurrentLevel();
-            
-            if (requiredKeys == 0)
-            {
-                Debug.Log($"[ExitDoor] No keys required for this level, exit allowed");
-                return true;
-            }
-
-            // Count collected keys in the level
-            GameObject parentLevel = GetParentLevelObject();
-            if (parentLevel == null)
-            {
-                // Fallback: count global collected keys
-                int globalCollected = CountAllCollectedKeys();
-                Debug.Log($"[ExitDoor] Keys collected: {globalCollected}/{requiredKeys}");
-                return globalCollected >= requiredKeys;
-            }
-
-            // Find all KeyPickup in this level
-            KeyPickup[] keysInLevel = parentLevel.GetComponentsInChildren<KeyPickup>(true);
-            int collectedCount = 0;
-            foreach (var key in keysInLevel)
-            {
-                if (key.IsCollected)
-                {
-                    collectedCount++;
-                }
-            }
-
-            Debug.Log($"[ExitDoor] Keys in {parentLevel.name}: {collectedCount}/{requiredKeys}");
-            return collectedCount >= requiredKeys;
+            totalKeysCollected = 0;
+            Debug.Log("[ExitDoor] Key count reset to 0");
         }
 
         /// <summary>
-        /// Get hardcoded required keys for current level.
-        /// Based on parent level name (Level1, Level2, Level3, Level4).
+        /// Increment the key count when player collects a key.
+        /// Called from KeyPickup.
         /// </summary>
-        private int GetRequiredKeysForCurrentLevel()
+        public static void AddCollectedKey()
         {
-            GameObject parentLevel = GetParentLevelObject();
-            string levelName = parentLevel != null ? parentLevel.name : "";
-            
-            Debug.Log($"[ExitDoor] Checking key requirement for: {levelName} (exitTouchCount={exitTouchCount})");
-            
-            // Hardcoded requirements based on level name
-            switch (levelName)
+            totalKeysCollected++;
+            Debug.Log($"[ExitDoor] Key collected! Total: {totalKeysCollected}");
+        }
+
+        /// <summary>
+        /// Get required keys for each exit.
+        /// Exit 1: 0 keys (free pass)
+        /// Exit 2: 0 keys (free pass)
+        /// Exit 3: 1 key required
+        /// Exit 4: 2 keys required
+        /// </summary>
+        private int GetRequiredKeysForExit(int exitNumber)
+        {
+            switch (exitNumber)
             {
-                case "Level1": return 0;  // Level1: 0 keys
-                case "Level2": return 0;  // Level2: 0 keys
-                case "Level3": return 1;  // Level3: 1 key
-                case "Level4": return 2;  // Level4: 2 keys
+                case 1: return 0;  // Lần 1: không cần key
+                case 2: return 0;  // Lần 2: không cần key
+                case 3: return 1;  // Lần 3: cần 1 key
+                case 4: return 2;  // Lần 4: cần 2 key
                 default: return 0;
             }
         }
 
         /// <summary>
-        /// Count all collected keys in the scene.
+        /// Check if player has enough keys for current exit.
         /// </summary>
-        private int CountAllCollectedKeys()
+        private bool HasEnoughKeys()
         {
-            KeyPickup[] allKeys = FindObjectsOfType<KeyPickup>();
-            int count = 0;
-            foreach (var key in allKeys)
-            {
-                if (key.IsCollected) count++;
-            }
-            return count;
+            int exitNumber = exitTouchCount + 1;
+            int requiredKeys = GetRequiredKeysForExit(exitNumber);
+            
+            Debug.Log($"[ExitDoor] Exit #{exitNumber}: Need {requiredKeys} keys, have {totalKeysCollected}");
+            return totalKeysCollected >= requiredKeys;
         }
 
         /// <summary>
@@ -236,31 +209,25 @@ namespace Visioneer.MaskPuzzle
 
         private void TryExit()
         {
-            // Check if all keys in this level are collected
-            if (!AreAllLevelKeysCollected())
+            // Get current exit number (before incrementing)
+            int exitNumber = exitTouchCount + 1;
+            int requiredKeys = GetRequiredKeysForExit(exitNumber);
+
+            Debug.Log($"[ExitDoor] Trying Exit #{exitNumber}: Need {requiredKeys} keys, have {totalKeysCollected}");
+
+            // Check if enough keys collected
+            if (totalKeysCollected < requiredKeys)
             {
-                GameObject parentLevel = GetParentLevelObject();
-                string levelName = parentLevel != null ? parentLevel.name : "this level";
-                Debug.Log($"[ExitDoor] Not all keys collected in {levelName}");
-                UIHudController.Instance?.ShowToast($"Collect all keys in {levelName}!", 2f);
+                Debug.Log($"[ExitDoor] Exit #{exitNumber}: Not enough keys!");
+                int keysNeeded = requiredKeys - totalKeysCollected;
+                UIHudController.Instance?.ShowToast($"Cần thêm {keysNeeded} chìa khóa!", 2f);
                 SimpleAudioManager.Instance?.PlayLocked();
                 return;
             }
 
-            // Check if this exit is the correct one for current count
-            // Exit #1 must be in Level1, Exit #2 in Level2, etc.
-            if (!IsCorrectLevelExit())
-            {
-                string expected = GetExpectedLevelName();
-                Debug.Log($"[ExitDoor] Wrong exit! Expected exit in {expected}");
-                UIHudController.Instance?.ShowToast($"Wrong exit! Find the exit in {expected}", 2f);
-                SimpleAudioManager.Instance?.PlayInvalid();
-                return;
-            }
-
-            // Increment exit touch counter
+            // SUCCESS - Increment exit touch counter
             exitTouchCount++;
-            Debug.Log($"[ExitDoor] Exit touched! Count: {exitTouchCount}/{requiredExitCount}");
+            Debug.Log($"[ExitDoor] Exit #{exitNumber} passed! Total: {exitTouchCount}/{requiredExitCount}");
 
             // Play level animation
             PlayLevelAnimation();
@@ -344,15 +311,15 @@ namespace Visioneer.MaskPuzzle
 
         private void UpdateVisual()
         {
-            bool hasKey = KeyPickup.Instance != null && KeyPickup.Instance.IsCollected;
+            bool hasEnough = HasEnoughKeys();
 
             if (lockedIndicator != null)
             {
-                lockedIndicator.SetActive(!hasKey);
+                lockedIndicator.SetActive(!hasEnough);
             }
             if (unlockedIndicator != null)
             {
-                unlockedIndicator.SetActive(hasKey);
+                unlockedIndicator.SetActive(hasEnough);
             }
         }
     }
